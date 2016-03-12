@@ -1,13 +1,13 @@
-package situations.esper.application;
+package application;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.table.DefaultTableModel;
 
-import situations.esper.control.Situation;
-import situations.esper.definition.bank.SuspiciousFarawayLogin;
-import situations.esper.definition.bank.SuspiciousParallelLogin;
+import control.Situation;
+import definition.SuspiciousFarawayLogin;
+import definition.SuspiciousParallelLogin;
 
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPStatement;

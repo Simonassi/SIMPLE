@@ -1,4 +1,4 @@
-package situations.esper.application;
+package application;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -19,14 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import situations.esper.model.bank.ATM;
-import situations.esper.model.bank.Access;
-import situations.esper.model.bank.Account;
-import situations.esper.model.bank.Computer;
-import situations.esper.model.bank.Device;
-import situations.esper.model.bank.Location;
-import situations.esper.model.bank.MobileDevice;
-import situations.esper.model.bank.OngoingWithdrawal;
+import model.ATM;
+import model.Access;
+import model.Account;
+import model.Computer;
+import model.Device;
+import model.Location;
+import model.MobileDevice;
+import model.OngoingWithdrawal;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;

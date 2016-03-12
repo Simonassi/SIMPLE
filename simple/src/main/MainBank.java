@@ -1,19 +1,19 @@
-package situations.esper.main;
+package main;
 import org.apache.log4j.PropertyConfigurator;
 
-import situations.esper.application.Initi;
-import situations.esper.application.Monitoring;
-import situations.esper.control.SituationDefinition;
-import situations.esper.control.SituationManager;
-import situations.esper.definition.bank.AccountUnderObservation;
-import situations.esper.definition.bank.LoggedIn;
-import situations.esper.definition.bank.OngoingSuspiciousWithdrawal;
-import situations.esper.definition.bank.SuspiciousFarawayLogin;
-import situations.esper.definition.bank.SuspiciousParallelLogin;
-import situations.esper.listener.SituationListenerNoThread;
-import situations.esper.listener.SituationManagerListener;
-import situations.esper.listener.SituationManagerListenerNoThread;
-import situations.esper.testers.BankTester7;
+import application.Initi;
+import application.Monitoring;
+import control.SituationDefinition;
+import control.SituationManager;
+import definition.AccountUnderObservation;
+import definition.LoggedIn;
+import definition.OngoingSuspiciousWithdrawal;
+import definition.SuspiciousFarawayLogin;
+import definition.SuspiciousParallelLogin;
+import listener.SituationListenerNoThread;
+import listener.SituationManagerListener;
+import listener.SituationManagerListenerNoThread;
+import tester.BankTester;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPAdministrator;
@@ -98,13 +98,7 @@ public class MainBank {
 			Monitoring m = new Monitoring();
 			m.setVisible(true);
 		}else{
-			//BankTester1 tester = new BankTester1();
-			//BankTester2 tester = new BankTester2();
-			//BankTester3 tester = new BankTester3();
-			//BankTester4 tester = new BankTester4();
-			//BankTester5 tester = new BankTester5();
-			//BankTester6 tester = new BankTester6();
-			BankTester7 tester = new BankTester7();
+			BankTester tester = new BankTester();
 			tester.start();
 		}
 	}

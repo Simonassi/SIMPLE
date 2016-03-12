@@ -1,11 +1,11 @@
-package situations.esper.listener;
+package listener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-import situations.esper.control.Situation;
-import situations.esper.control.SituationManager;
+import control.Situation;
+import control.SituationManager;
 
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPStatement;

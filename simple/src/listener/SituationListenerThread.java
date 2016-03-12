@@ -1,6 +1,6 @@
-package situations.esper.listener;
+package listener;
 
-import situations.esper.control.Situation;
+import control.Situation;
 
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPStatement;

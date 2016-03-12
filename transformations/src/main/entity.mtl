@@ -4,11 +4,12 @@
 [import org::eclipse::acceleo::module::sample::main::resources /]
 [import org::eclipse::acceleo::module::sample::main::generate /]
 
+
 [comment template that generates all java code/]
 [template public javaEntities(aSMLModel : SMLModel)]
 [comment @main/]
 [esper_rules(aSMLModel)/] [comment teste /]
-[for (n : EntityClass  | superclasses(eAllContents(EntityParticipant).isOfType->asSet()))]
+[for (n : EntityClass  | eAllContents(EntityParticipant).isOfType->asSet()->union(contextModel.eAllContents(ctx::EntityClass)->asSet()))]
 [javaEntitie(n)/]
 [/for]
 [for (r : RelatorClass  | eAllContents(RelatorParticipant).isOfType->asSet())]
@@ -31,23 +32,7 @@ package [getProperty('javaPackage')/].model;
 
 import [getProperty('builtinsPackage')/].*;
 
-// [protected ('for imports')]
-// 
-// import java.lang.*
-//
-// [/protected]
-
 public[if isAbstract] abstract[/if] class [n.name.toUpperFirst().clean()/][if (not superclass.oclIsUndefined())] extends [superclass.name.toUpperFirst().clean()/][/if] {
-
-	// [protected ('for constructors and methods')]
-	/* 
-	public [n.name.toUpperFirst().clean()/]() {
-		[for (a : Attribute | attribute)]
-		this.set[name.toUpperFirst().clean()/];
-		[/for]
-	}
-	*/
-	// [/protected]
 	
 	[for (a : Attribute | attribute)]
 	private [datatype(a.datatype)/] [name.clean()/];
@@ -83,24 +68,8 @@ public[if isAbstract] abstract[/if] class [n.name.toUpperFirst().clean()/][if (n
 package [getProperty('javaPackage')/].model;
 import [getProperty('builtinsPackage')/].*;
 
-// [protected ('for imports')]
-// 
-// import java.lang.*
-//
-// [/protected]
-
 public class [n.name.toUpperFirst().clean()/] extends Situation{
 	
-	// [protected ('for constructors and methods')]
-	/* 
-	public [n.name.toUpperFirst().clean()/]() {
-		[for (a : Attribute | attribute)]
-		this.set[name.toUpperFirst().clean()/];
-		[/for]
-	}
-	*/
-	// [/protected]
-
 	[for (a : Attribute | attribute)]
 	private [datatype(a.datatype)/] [name.clean()/];
 	[/for]
@@ -163,12 +132,6 @@ import org.drools.situation.base.*;
 import [getProperty('javaPackage')/].model.*;
 import [getProperty('javaPackage')/].situation.*;
 import [getProperty('builtinsPackage')/].*;
-
-// [protected ('for imports')]
-// 
-// import java.lang.*
-//
-// [/protected]
 
 public class [s.name()/] extends Situation {
 	
