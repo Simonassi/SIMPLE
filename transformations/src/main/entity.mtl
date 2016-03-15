@@ -8,7 +8,6 @@
 [comment template that generates all java code/]
 [template public javaEntities(aSMLModel : SMLModel)]
 [comment @main/]
-[esper_rules(aSMLModel)/] [comment teste /]
 [for (n : EntityClass  | eAllContents(EntityParticipant).isOfType->asSet()->union(contextModel.eAllContents(ctx::EntityClass)->asSet()))]
 [javaEntitie(n)/]
 [/for]
@@ -127,7 +126,7 @@ public class [n.name.toUpperFirst().clean()/] extends Situation{
 [file (getProperty('genDir')+'/'+getProperty('javaDir')+'/'+getProperty('javaPackage').replaceAll('\\.', '/')+'/situation/'+s.name()+'.java', false, 'UTF-8')]
 package [getProperty('javaPackage')/].situation;
 
-import org.drools.situation.base.*;
+import com.espertech.esper.client.EventBean;
 
 import [getProperty('javaPackage')/].model.*;
 import [getProperty('javaPackage')/].situation.*;

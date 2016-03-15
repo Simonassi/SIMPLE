@@ -141,7 +141,6 @@
 	[l.value.replaceAll(' ', '').replaceAll('days|day','d')/]
 [/template]
 
-[comment START parameters functions/]
 [query public parameters(f : Function) : OrderedSet(Parameter) =
 	f.parameter->iterate(
 		q:Parameter;
@@ -194,8 +193,6 @@
 		endif
 	)
 /]
-
-[comment END parameters functions/]
 
 [comment return a set of all superclasses for a set of classes/]
 [query public superclasses(s : Set(EntityClass)) : Set(EntityClass) =
@@ -323,7 +320,9 @@
 [/template]
 
 [template public binding_name (p: Participant) post (trim())]
-[print_participant_name_lower(p) /][index_name(p) /]
+[if(p.nodeParameter.oclIsUndefined() = false)]
+[p.nodeParameter.name/]
+[else][print_participant_name_lower(p) /][index_name(p) /][/if]
 [/template]
 
 [template public binding_name_antigo (p: Participant) post (trim())]
@@ -441,26 +440,4 @@
 
 [template public clean(name : String) post (trim())]
 [name.replaceAll('\\s+', '_')/]
-[/template]
-
-[template public percorre(s: SituationType)]
-Inicio - [s.name.toUpperFirst()/]
-
-	EntityParticipant
-[for (n : EntityClass  | eAllContents(EntityParticipant).isOfType->asSet())] [comment retirar .isOfType para manter os iguais /] 
-		[n.name.toUpperFirst()/]
-[/for]
-
-	RelatorParticipant
-[for (r : RelatorClass  | eAllContents(RelatorParticipant).isOfType->asSet())]
-		[r.name.toUpperFirst()/]
-[/for]
-
-	SituationParticipant
-[for (sit : SituationParticipant | eAllContents(SituationParticipant))]
-		[sit.situationType.name.toUpperFirst()/]
-[/for]
-
-Fim - [s.name.toUpperFirst()/]
-
 [/template]

@@ -44,8 +44,8 @@ public class AccountUnderObservation extends Situation {
 		AccountUnderObservation accountUnderObservation = new AccountUnderObservation();
         
 		try{
-			accountUnderObservation.setAccount((Account)event.get("account"));
 			accountUnderObservation.setOngoingSuspiciousWithdrawal((OngoingSuspiciousWithdrawal)event.get("OngoingSuspiciousWithdrawal"));
+			accountUnderObservation.setAccount((Account)event.get("account"));
 		}catch(Exception e){
     		System.out.println("AccountUnderObservation: " + e);
     	}
@@ -58,8 +58,8 @@ public class AccountUnderObservation extends Situation {
 		AccountUnderObservation accountUnderObservation = new AccountUnderObservation();
         
 		try{
-			accountUnderObservation.setAccount(this.getAccount());
 			accountUnderObservation.setOngoingSuspiciousWithdrawal(this.getOngoingSuspiciousWithdrawal());
+			accountUnderObservation.setAccount(this.getAccount());
 		}catch(Exception e){
     		System.out.println("AccountUnderObservation: " + e);
     	}

@@ -56,37 +56,41 @@
     </elements>
   </elements>
   <elements name="SuspiciousFarawayLogin">
-    <elements xsi:type="sml:SituationParticipant" sourceRelation="//@elements.3/@elements.2" situationType="//@elements.0" parameter="//@elements.3/@elements.3 //@elements.3/@elements.4" isPast="true"/>
-    <elements xsi:type="sml:SituationParticipant" targetRelation="//@elements.3/@elements.2" situationType="//@elements.0" parameter="//@elements.3/@elements.5 //@elements.3/@elements.6"/>
-    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.0" target="//@elements.3/@elements.1" relation="//@primitiveContextElements.5" parameter="0.2h"/>
-    <elements xsi:type="sml:SituationParameterReference" sourceRelation="//@elements.3/@elements.7" parameter="//@elements.0/@parameter.0" situation="//@elements.3/@elements.0"/>
-    <elements xsi:type="sml:SituationParameterReference" sourceRelation="//@elements.3/@elements.10" parameter="//@elements.0/@parameter.1" situation="//@elements.3/@elements.0"/>
-    <elements xsi:type="sml:SituationParameterReference" targetRelation="//@elements.3/@elements.7" parameter="//@elements.0/@parameter.0" situation="//@elements.3/@elements.1"/>
-    <elements xsi:type="sml:SituationParameterReference" sourceRelation="//@elements.3/@elements.11" parameter="//@elements.0/@parameter.1" situation="//@elements.3/@elements.1"/>
-    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.3" target="//@elements.3/@elements.5">
+    <elements xsi:type="sml:SituationParticipant" reference="//@elements.3/@elements.1" situationType="//@elements.0" parameter="//@elements.3/@elements.4 //@elements.3/@elements.5" isPast="true"/>
+    <elements xsi:type="sml:AttributeReference" sourceRelation="//@elements.3/@elements.17" entity="//@elements.3/@elements.0" attribute="//@primitiveContextElements.3/@attribute.0"/>
+    <elements xsi:type="sml:SituationParticipant" reference="//@elements.3/@elements.3" situationType="//@elements.0" parameter="//@elements.3/@elements.6 //@elements.3/@elements.7"/>
+    <elements xsi:type="sml:AttributeReference" sourceRelation="//@elements.3/@elements.18" entity="//@elements.3/@elements.2" attribute="//@primitiveContextElements.3/@attribute.0"/>
+    <elements xsi:type="sml:SituationParameterReference" sourceRelation="//@elements.3/@elements.8" parameter="//@elements.0/@parameter.0" situation="//@elements.3/@elements.0"/>
+    <elements xsi:type="sml:SituationParameterReference" sourceRelation="//@elements.3/@elements.11" parameter="//@elements.0/@parameter.1" situation="//@elements.3/@elements.0"/>
+    <elements xsi:type="sml:SituationParameterReference" targetRelation="//@elements.3/@elements.8" parameter="//@elements.0/@parameter.0" situation="//@elements.3/@elements.2"/>
+    <elements xsi:type="sml:SituationParameterReference" sourceRelation="//@elements.3/@elements.12" parameter="//@elements.0/@parameter.1" situation="//@elements.3/@elements.2"/>
+    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.4" target="//@elements.3/@elements.6">
       <relation href="bank.ctx#//@elements.14"/>
-    </elements>
-    <elements xsi:type="sml:EntityParticipant" targetRelation="//@elements.3/@elements.10" reference="//@elements.3/@elements.12">
-      <isOfType href="bank.ctx#//@elements.1"/>
     </elements>
     <elements xsi:type="sml:EntityParticipant" targetRelation="//@elements.3/@elements.11" reference="//@elements.3/@elements.13">
       <isOfType href="bank.ctx#//@elements.1"/>
     </elements>
-    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.4" target="//@elements.3/@elements.8">
+    <elements xsi:type="sml:EntityParticipant" targetRelation="//@elements.3/@elements.12" reference="//@elements.3/@elements.14">
+      <isOfType href="bank.ctx#//@elements.1"/>
+    </elements>
+    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.5" target="//@elements.3/@elements.9">
       <relation href="bank.ctx#//@elements.14"/>
     </elements>
-    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.6" target="//@elements.3/@elements.9">
+    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.7" target="//@elements.3/@elements.10">
       <relation href="bank.ctx#//@elements.14"/>
     </elements>
-    <elements xsi:type="sml:AttributeReference" sourceRelation="//@elements.3/@elements.14" entity="//@elements.3/@elements.8">
+    <elements xsi:type="sml:AttributeReference" sourceRelation="//@elements.3/@elements.15" entity="//@elements.3/@elements.9">
       <attribute href="bank.ctx#//@elements.1/@attribute.0"/>
     </elements>
-    <elements xsi:type="sml:AttributeReference" targetRelation="//@elements.3/@elements.14" entity="//@elements.3/@elements.9">
+    <elements xsi:type="sml:AttributeReference" targetRelation="//@elements.3/@elements.15" entity="//@elements.3/@elements.10">
       <attribute href="bank.ctx#//@elements.1/@attribute.0"/>
     </elements>
-    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.12" target="//@elements.3/@elements.13" parameter="500km" isNegated="true">
+    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.13" target="//@elements.3/@elements.14" parameter="500km" isNegated="true">
       <relation href="bank.ctx#//@elements.19"/>
     </elements>
+    <elements xsi:type="sml:Literal" targetRelation="//@elements.3/@elements.17 //@elements.3/@elements.18" value="2 hours" dataType="//@primitiveContextElements.0"/>
+    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.1" target="//@elements.3/@elements.16" relation="//@primitiveContextElements.1"/>
+    <elements xsi:type="sml:ComparativeRelation" source="//@elements.3/@elements.3" target="//@elements.3/@elements.16" relation="//@primitiveContextElements.1"/>
   </elements>
   <elements name="AccountUnderObservation">
     <parameter nodeReference="//@elements.4/@elements.1" name="account"/>

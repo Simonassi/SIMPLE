@@ -11,46 +11,6 @@
 
 /]
 
-[comment teste /]
-[template public esper_rules(aSMLModel : SMLModel)]
-[file ('teste', false, 'UTF-8')]	
-[for (s : SituationType | elements)]
-	[epl(s)/]	
-[/for]
-[/file]
-[/template]
-
-[comment teste /]
-[template public epl(s: SituationType)]
-## ATIVACAO ##
-
-Inicio - [s.name.toUpperFirst()/]
-
-select
-	[epl_ativacao_select(s)/]
-from
-	[epl_ativacao_from(s)/]
-
-where
-	[epl_ativacao_where(s)/]
-
-Fim - [s.name.toUpperFirst()/]
-
-## DESATIVACAO ##
-
-Inicio - [s.name.toUpperFirst()/]
-
-select
-	[epl_desativacao_select(s)/]
-from
-	[epl_desativacao_from(s)/]
-
-[epl_desativacao_where(s)/]
-
-Fim - [s.name.toUpperFirst()/]
-
-[/template]
-
 [template public epl_ativacao(s: SituationType) post (replaceAll('\n',' '))]
 select
 	[epl_ativacao_select(s)/]
@@ -120,7 +80,7 @@ from
 [let spr_participants : OrderedSet(Participant) = participants.eContainer(SituationType).elements->filter(SituationParameterReference)->asOrderedSet()->spr_participants() ]
 [let link_participants : OrderedSet(Participant) = participants.eContainer(SituationType).elements->filter(Link)->asOrderedSet()->link_participants() ]
 [let all_relevant_participants : OrderedSet(Participant) = all_participants->osminus(spr_participants)->osminus(link_participants) ]
-[for (p: Participant | all_relevant_participants)], [binding_name(p) /].key as key[i/][/for]
+[for (p: Participant | all_relevant_participants)][if(p.oclIsTypeOf(ExistsSituation) = false)], [binding_name(p) /].key as key[i/][/if][/for]
 [/let]
 [/let]
 [/let]
@@ -143,7 +103,6 @@ from
 
 
 [template public from_print_all_participant_names (participants: Set(Participant)) post (trim().replace('or \\(', '\\(')) ]
-[ comment participants->asOrderedSet()->osminus(participants.eContainer(SituationType).elements->filter(Link)->asOrderedSet()->link_participants()) /]
 [let all_participants : OrderedSet(Participant) = participants->asOrderedSet() ]
 [let spr_participants : OrderedSet(Participant) = participants.eContainer(SituationType).elements->filter(SituationParameterReference)->asOrderedSet()->spr_participants() ]
 [let link_participants : OrderedSet(Participant) = participants.eContainer(SituationType).elements->filter(Link)->asOrderedSet()->link_participants() ]
@@ -169,7 +128,6 @@ pattern['['/] every (
 
 [template public from_window_1_participant (p: Participant) post (trim())]
 [if (p.oclIsTypeOf(ExistsSituation) = false) ]
-	[comment if(p.oclIsTypeOf(RelatorParticipant) = true)(activated = true)[/if/]
 	[if(p.reference->size() > 0)]
 		[for (at : AttributeReference | p.reference) ]
 			[if (at.attribute.name = 'final time') ]
@@ -187,10 +145,9 @@ pattern['['/] every (
 [template public from_window_more_than_1_participant (p: Participant, participants: Sequence(Participant)) post (trim())]
 [if(participants->indexOf(p) = participants->size()) ]
 [if (p.oclIsTypeOf(ExistsSituation) = false) ]
-	[comment if(p.oclIsTypeOf(RelatorParticipant) = true)(activated = true)[/if/]
 	[if(p.reference->size() > 0)]
 		[for (at : AttributeReference | p.reference) ]
-			[if (at.attribute.name = 'start time') ]
+			[if (at.attribute.name = 'start time' or at.attribute.name = 'final time') ]
 				[for( s: ComparativeRelation | at.sourceRelation ) ]
 					[if(s.relation.name = 'within the past')]
 						where timer:within([s.target.oclAsType(Literal).value/])						
@@ -249,7 +206,7 @@ or [from_more_than_1_participant_combination(participants)/]
 [/template]
 
 [template public participant_status(p: SituationParticipant, type: Boolean) post (trim())]
-[if(type = true)][if(p.isPast = false)]false[else]true[/if]
+[if(type = false)][if(p.isPast = false)]false[else]true[/if]
 [else][if(p.isPast = false)]true[else]false[/if][/if]
 [/template]
 
@@ -277,12 +234,12 @@ or [from_more_than_1_participant_combination(participants)/]
 [/template]
 
 [template public relations(node : Node, activation_rule : Boolean)]
-[if (node.oclIsTypeOf(EntityParticipant))][formal_relations(node.oclAsType(EntityParticipant), activation_rule)/][elseif (node.oclIsTypeOf(RelatorParticipant))][formal_relations(node.oclAsType(RelatorParticipant), activation_rule)/][comment material_relations(node.oclAsType(RelatorParticipant))/][elseif (node.oclIsKindOf(SituationParticipant))][situation_relations(node.oclAsType(SituationParticipant), activation_rule)/][/if ]
+[if (node.oclIsTypeOf(EntityParticipant))][formal_relations(node.oclAsType(EntityParticipant), activation_rule)/][elseif (node.oclIsTypeOf(RelatorParticipant))][formal_relations(node.oclAsType(RelatorParticipant), activation_rule)/][elseif (node.oclIsKindOf(SituationParticipant))][situation_relations(node.oclAsType(SituationParticipant), activation_rule)/][/if ]
 [/template]
 
 [template public formal_relations(p : Participant, activation_rule : Boolean) post (trim())]
 [for (rel : ComparativeRelation | p.sourceRelation)]
-[comparative_relation(p, rel, rel.target, activation_rule) /] [comment falta testar melhor/]
+[comparative_relation(p, rel, rel.target, activation_rule) /]
 [/for ]
 [formal_relations_attributes(p, activation_rule)/]
 
@@ -336,7 +293,6 @@ or [from_more_than_1_participant_combination(participants)/]
 [/let]
 [/let]
 [/let]
-[comment][for (rel : ComparativeRelation | s.sourceRelation)][comparative_relation(rel)/] [value(rel.target)/][/for ][/comment]
 [for (p : SituationParameterReference | parameter)]
 [for (r : ComparativeRelation | p.sourceRelation)]
 [if(r.target.oclIsKindOf(SituationParameterReference) = true)] [ comment olhar apenas os SituationParameterRefence relacionado a outro SituationParameterReference/]
@@ -367,8 +323,6 @@ or [from_more_than_1_participant_combination(participants)/]
 [sit_param_name(n.oclAsType(SituationParameterReference))/]
 [elseif (n.oclIsTypeOf(SituationParticipant))]
 [fully_qualified_name(n.oclAsType(SituationParticipant))/]
-[elseif (n.oclIsTypeOf(Function))]
-[comment function(n.oclAsType(Function))/]
 [/if ]
 [/template]
 
@@ -493,7 +447,7 @@ pattern['['/]
 	[situationType.name/] = [situationType.name/] ->
 	every (
 		   timer:interval( [deactivate_from_exists_value(existParticipant) /] )
-		   and not [print_participant_name(existParticipant)/] ([from_print_participant_status(existParticipant, false)/])
+		   and not [print_participant_name(existParticipant)/] ([from_print_participant_status(existParticipant, true)/])
           )
 	   [']'/] 
 [/let]
@@ -564,7 +518,7 @@ pattern['['/]
 [template public epl_desativacao_where(s: SituationType) ]
 [let participants : OrderedSet(Participant) = s.elements->filter(Participant) ]
 [if(participants->select(p:Participant| p.oclIsTypeOf(ExistsSituation) = true)->size() > 0 )]
-	[if(participants->select(p:Participant| p.sourceRelation.oclIsUndefined() = false)->size() > 0)] [comment testar /]
+	[if(participants->select(p:Participant| p.sourceRelation.oclIsUndefined() = false)->size() > 0)]
 where
 [for(p : Participant | participants) ][relations(p, false)/][/for]
 	[/if]
@@ -577,7 +531,7 @@ where
 [/template]
 
 [template public deactivate_where_print_all_participant_names (participants: Set(Participant)) post(replaceAll('or not \\(\\)', '').replaceAll('\\( or', '\\(').replaceAll('\n', ' ').replaceAll('\t', '').replaceAll('  ', ' ').replaceAll('or  or', 'or').replaceAll('\\) or  \\(', '\\) \nor \\(').replaceAll('\\) or \\(', '\\) \nor \\(')) ]
-[print_situation_type_name(participants)/].activated = true 
+[print_situation_type_name(participants)/].activated is true 
 and ( [deactivate_where_print_all_participant_names_iteration(participants) /] [if(participants->asOrderedSet()->first().eContainer(SituationType).elements->filter(Function)->size() =  0 )])[/if]
 [/template]
 
@@ -603,7 +557,7 @@ and ( [deactivate_where_print_all_participant_names_iteration(participants) /] [
 [/template]
 
 [template public deactivate_where_print_comparation_key (n: Node) post(trim()) ]
-[if (n.oclIsTypeOf(EntityParticipant))] [comment troquei binding_name por fully_qualified_name no segundo item de cada linha /]
+[if (n.oclIsTypeOf(EntityParticipant))]
 [print_situation_type_name(n)/].[fully_qualified_name(n.oclAsType(EntityParticipant))/].key = [deactivate_value(n.oclAsType(EntityParticipant))/].key
 [elseif (n.oclIsTypeOf(RelatorParticipant))]
 [print_situation_type_name(n)/].[fully_qualified_name(n.oclAsType(RelatorParticipant))/].key = [deactivate_value(n.oclAsType(RelatorParticipant))/].key
@@ -644,23 +598,11 @@ and ( [deactivate_where_print_all_participant_names_iteration(participants) /] [
 		[let link_participants : OrderedSet(Participant) = p.eContainer(SituationType).elements->filter(Link)->asOrderedSet()->link_participants() ]
 		[let all_relevant_participants : OrderedSet(Participant) = all_participants->osminus(spr_participants)->osminus(link_participants) ]
 		[if( (p.oclIsTypeOf(EntityParticipant) = true) and (all_relevant_participants->select(self.oclAsType(EntityParticipant).isOfType.name = p.oclAsType(EntityParticipant).isOfType.name)->size() > 1) )]
-			[comment if((unamed->filter(EntityParticipant)->select(e:EntityParticipant| e.isOfType = p.oclAsType(EntityParticipant).isOfType)->indexOf(p)) = 1) /]
-				[comment for(p: Participant | all_relevant_participants->select(self.oclAsType(EntityParticipant).isOfType.name = p.oclAsType(EntityParticipant).isOfType.name)) /]
 		[checkFirstOr(index, 1)/][deactivate_where_print_class_name(p) /]
-				[comment for /]
-			[comment if /]
 		[elseif( (p.oclIsTypeOf(RelatorParticipant) = true) and (all_relevant_participants->select(self.oclAsType(RelatorParticipant).isOfType.name = p.oclAsType(RelatorParticipant).isOfType.name)->size() > 1) )]
-			[comment if((unamed->filter(RelatorParticipant)->select(e:RelatorParticipant| e.isOfType = p.oclAsType(RelatorParticipant).isOfType)->indexOf(p)) = 1) /]				
-				[comment for(p: Participant | all_relevant_participants->select(self.oclAsType(RelatorParticipant).isOfType.name = p.oclAsType(RelatorParticipant).isOfType.name)) /]
 		[checkFirstOr(index, 1)/][deactivate_where_print_class_name(p) /]
-				[comment for /]
-			[comment if /]
 		[elseif( (p.oclIsTypeOf(SituationParticipant) = true) and (all_relevant_participants->select(self.oclAsType(SituationParticipant).situationType.name = p.oclAsType(SituationParticipant).situationType.name)->size() > 1 ))]
-			[comment if((unamed->filter(SituationParticipant)->select(e:SituationParticipant|e.situationType = p.oclAsType(SituationParticipant).situationType)->indexOf(p)) = 1 ) /]
-				[comment for(p: Participant | all_relevant_participants->select(self.oclAsType(SituationParticipant).situationType.name = p.oclAsType(SituationParticipant).situationType.name)) /]
 		[checkFirstOr(index, 1)/][deactivate_where_print_class_name(p) /]
-				[comment for/]
-			[comment if /]
 		[else]
 		[checkFirstOr(index, 1)/][deactivate_where_print_class_name(p) /]
 		[/if]
@@ -674,14 +616,11 @@ and ( [deactivate_where_print_all_participant_names_iteration(participants) /] [
 [/template]
 
 [template public deactivate_where_print_class_name (p: Participant) post (trim()) ]
-[comment if(p.oclIsTypeOf(EntityParticipant)) /]
-[comment deactivate_where_print_comparation(p)/] 
-[comment if /]
 [if(p.oclIsTypeOf(RelatorParticipant))]
 ([deactivate_where_print_comparation(p)/] and [deactivate_where_binding_name_1(p)/].activated is not true) 
 [/if]
 [if(p.oclIsTypeOf(SituationParticipant))]
-([deactivate_where_print_comparation(p)/] and [deactivate_where_binding_name_1(p)/].activated is not [if(p.oclAsType(SituationParticipant).isPast)]false[else]true[/if]) 
+([deactivate_where_print_comparation(p)/] and [deactivate_where_binding_name_1(p)/].activated is not [if(p.oclAsType(SituationParticipant).isPast = true)]false[else]true[/if]) 
 [/if]
 [/template]
 
@@ -703,7 +642,6 @@ and ( [deactivate_where_print_all_participant_names_iteration(participants) /] [
 [/if]
 [/template]
 
-[ comment retirei os OR /]
 [template public deactivate_comparative_relation_user(source: Node, rel : ComparativeRelation, target: Node) post(trim())]
 [if(source.oclIsTypeOf(SituationParameterReference))]
 [checkRelevantParticipantsOr(source) /] ([deactivate_where_print_comparation_id (source.oclAsType(SituationParameterReference).situation)/] and [if (rel.isNegated)]not ([/if ]not ([print_relation(rel.relation)/]([deactivate_value(source.oclAsType(SituationParameterReference).situation)/].[source.oclAsType(SituationParameterReference).parameter.name.clean()/], [print_situation_type_name_relation(target, false)/][value(target)/] [parameter_user(rel)/])))[if (rel.isNegated)])[/if ]
@@ -731,17 +669,15 @@ and ( [deactivate_where_print_all_participant_names_iteration(participants) /] [
 [deactivate_sit_param_name(n.oclAsType(SituationParameterReference))/]
 [elseif (n.oclIsTypeOf(SituationParticipant))]
 [fully_qualified_name_deactivate_1(n.oclAsType(SituationParticipant))/]
-[elseif (n.oclIsTypeOf(Function))]
-[comment function(n.oclAsType(Function))/]
 [/if ]
 [/template]
 
 [template public deactivate_attr_name(attr : AttributeReference)]
-[comment deactivate_where_binding_name_1(attr.entity)/][fully_qualified_name_deactivate_1(attr.entity)/].[attribute.name.clean()/]
+[fully_qualified_name_deactivate_1(attr.entity)/].[attribute.name.clean()/]
 [/template]
 
 [template public deactivate_sit_param_name(param : SituationParameterReference)]
-[comment deactivate_where_binding_name_1(param.situation)/][fully_qualified_name_deactivate_1(param.situation)/].[param.parameter.name.clean()/]
+[fully_qualified_name_deactivate_1(param.situation)/].[param.parameter.name.clean()/]
 [/template]
 
 [template public deactivate_where_all_functions (s: SituationType) post(trim()) ]
